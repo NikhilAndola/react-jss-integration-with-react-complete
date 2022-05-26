@@ -1,0 +1,21 @@
+Custom setup
+
+If you want to specify a JSS version and plugins to use, you should create your own JSS instance, setup plugins and pass it to JssProvider.
+
+import React from 'react'
+import {create as createJss} from 'jss'
+import {JssProvider} from 'react-jss'
+import vendorPrefixer from 'jss-plugin-vendor-prefixer'
+
+const jss = createJss()
+jss.use(vendorPrefixer())
+
+const App = () => null
+const Component = () => (
+  <JssProvider jss={jss}>
+    <App />
+  </JssProvider>
+)
+You can also access the default JSS instance.
+
+import {jss} from 'react-jss'

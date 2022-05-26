@@ -1,0 +1,41 @@
+Multi-tree setup
+
+In case you render multiple react rendering trees in one application, you will get class name collisions because every JssProvider rerender will reset the class names generator. If you want to avoid this, you can share the class names generator between multiple JssProvider instances.
+
+Note: in case of SSR, make sure to create a new generator for each request. Otherwise, class names will become indeterministic, and at some point, you may run out of max safe integer numbers.
+
+import React from 'react'
+import {createGenerateId, JssProvider} from 'react-jss'
+
+const generateId = createGenerateId()
+const App1 = () => null
+const App2 = () => null
+
+const Component = () => (
+  <div>
+    <JssProvider generateId={generateId}>
+      <App1 />
+    </JssProvider>
+    <JssProvider generateId={generateId}>
+      <App2 />
+    </JssProvider>
+  </div>
+)
+You can also additionally use the classNamePrefix prop to add the app/subtree name to each class name. This way you can see which app generated a class name in the DOM view.
+
+import React from 'react'
+import {JssProvider} from 'react-jss'
+
+const App1 = () => null
+const App2 = () => null
+
+const Component = () => (
+  <div>
+    <JssProvider classNamePrefix="App1-">
+      <App1 />
+    </JssProvider>
+    <JssProvider classNamePrefix="App2-">
+      <App2 />
+    </JssProvider>
+  </div>
+)

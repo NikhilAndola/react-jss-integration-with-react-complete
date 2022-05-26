@@ -1,0 +1,39 @@
+Injection order
+
+Injection of style tags happens in the same order as the createUseStyles() invocation. Source order specificity is higher the lower style tag is in the tree. Therefore you should call createUseStyles of components you want to override first.
+
+Example
+
+import React from 'react'
+import {createUseStyles} from 'react-jss'
+
+// Will render first once component mounts, because `createUseStyles()` call order matters.
+const useLabelStyles = createUseStyles({
+  label: {
+    color: 'red'
+  }
+})
+
+const useButtonStyles = createUseStyles({
+  button: {
+    color: 'red'
+  }
+})
+
+// Will render styles first.
+const Label = ({children}) => {
+  const classes = useLabelStyles()
+  return <label className={classes.label}>{children}</label>
+}
+
+const Button = () => {
+  const classes = useButtonStyles()
+  // The order in which we render those components doesn't matter.
+  // What matters is the order of `createUseStyles()` calls.
+  return (
+    <>
+      <button className={classes.button} />
+      <Label>my button</Label>
+    </>
+  )
+}
